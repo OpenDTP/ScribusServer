@@ -20,12 +20,16 @@ class OpenDTPServer : public QThread
 {
 	Q_OBJECT
 
+public:
+  OpenDTPServer();
+  ~OpenDTPServer();
 private:
 	void run();
 	void response(int, const char *);
 
 	struct sockaddr     cli_addr;
 	int fd;
+  int client;
 	QTimer timer;
 
 signals:

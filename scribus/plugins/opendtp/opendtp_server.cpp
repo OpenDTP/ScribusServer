@@ -1,5 +1,17 @@
 #include "opendtp_server.h"
 
+OpenDTPServer::OpenDTPServer() {
+  this->client = 0;
+}
+
+OpenDTPServer::~OpenDTPServer() {
+  OpenDTPLogging      &logger = OpenDTPLogging::getInstance();
+
+  if (this->client != 0)
+    close(this->client);
+  logger.info("Closing connection");
+}
+
 void OpenDTPServer::doCommand() {
   int                 newsockfd;
   socklen_t           clilen;
@@ -16,17 +28,22 @@ void OpenDTPServer::doCommand() {
       return;
     if (n > 0)
     {
-      params.parse(buffer, n);
-      if (params.getParams().size() > 1) {
-        logger.debug("passage");
-        emit hasRequest(params.getScript(), params.getParams());
-        this->response(newsockfd, buffer);
+      logger.info("Client connection received");
+      if (client == 0)
+        client = newsockfd;
+      if (client == newsockfd) {
+        params.parse(buffer, n);
+        if (params.getParams().size() > 1) {
+          emit hasRequest(params.getScript(), params.getParams());
+          this->response(newsockfd, buffer);
+        }
+        logger.debug("RECEIVED : ");
+        logger.debug(buffer);
       }
-      logger.debug("RECEIVED : ");
-      logger.debug(buffer);
+      else {
+        logger.error("Forbidden connection received : No more allowed");
+      }
     }
-    logger.info("Closing connection");
-    close(newsockfd);
   }
 }
 
@@ -44,12 +61,12 @@ void OpenDTPServer::run()
   OpenDTPLogging &logger = OpenDTPLogging::getInstance();
   struct sockaddr_in serv_addr;
 
-  logger.info("Trying to create the socket\n");
+  logger.info("Trying to create the socket");
   this->fd = socket(AF_INET, SOCK_STREAM, 0);
   fcntl (this->fd, F_SETFL, O_NONBLOCK);
   if (this->fd < 0)
   {
-    logger.error("Error creating the socket\n");
+    logger.error("Error creating the socket");
     return;
   }
   bzero((char *) &serv_addr, sizeof(serv_addr));
@@ -58,11 +75,11 @@ void OpenDTPServer::run()
   serv_addr.sin_port = htons(PORT_NUMBER);
   if (bind(this->fd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
   {
-    logger.error("Error binding the socket\n");
+    logger.error("Error binding the socket");
     return;
   }
   listen(this->fd, 42);
-  logger.info("Correctly created the socket\n");
+  logger.info("Correctly created the socket");
 
   connect(&(this->timer), SIGNAL(timeout()), this, SLOT(doCommand()), Qt::DirectConnection);
   this->timer.setInterval(5);
