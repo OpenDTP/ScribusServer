@@ -22,14 +22,13 @@ class OpenDTPServer : public QThread
 
 public:
   OpenDTPServer();
-  ~OpenDTPServer();
 private:
 	void run();
 	void response(int, const char *);
 
 	struct sockaddr     cli_addr;
 	int fd;
-  int client;
+  bool working;
 	QTimer timer;
 
 signals:

@@ -1,15 +1,7 @@
 #include "opendtp_server.h"
 
 OpenDTPServer::OpenDTPServer() {
-  this->client = 0;
-}
-
-OpenDTPServer::~OpenDTPServer() {
-  OpenDTPLogging      &logger = OpenDTPLogging::getInstance();
-
-  if (this->client != 0)
-    close(this->client);
-  logger.info("Closing connection");
+  this->working = false;
 }
 
 void OpenDTPServer::doCommand() {
@@ -29,21 +21,24 @@ void OpenDTPServer::doCommand() {
     if (n > 0)
     {
       logger.info("Client connection received");
-      if (client == 0)
-        client = newsockfd;
-      if (client == newsockfd) {
+      if (!this->working) {
+        this->working = true;
         params.parse(buffer, n);
         if (params.getParams().size() > 1) {
           emit hasRequest(params.getScript(), params.getParams());
           this->response(newsockfd, buffer);
+          this->working = false;
         }
         logger.debug("RECEIVED : ");
         logger.debug(buffer);
       }
       else {
-        logger.error("Forbidden connection received : No more allowed");
+        this->response(newsockfd, "{error_code : 2, error_message : \"Too many requests\"}");
+        logger.error("Forbidden connection received : Too many requests");
       }
     }
+    close(newsockfd);
+    logger.info("Closing connection");
   }
 }
 
