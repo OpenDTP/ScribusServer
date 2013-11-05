@@ -27,10 +27,10 @@ void OpenDTPServer::doCommand() {
         if (params.getParams().size() > 1) {
           emit hasRequest(params.getScript(), params.getParams());
           this->response(newsockfd, buffer);
-          this->working = false;
         }
         logger.debug("RECEIVED : ");
         logger.debug(buffer);
+        this->working = false;
       }
       else {
         this->response(newsockfd, "{error_code : 2, error_message : \"Too many requests\"}");
