@@ -25,7 +25,6 @@ void SocketThread::run()
     if (n > 0)
     {
       logger.info("Client connection received");
-      sleep(5);
       params.parse(buffer, n);
       if (params.getParams().size() > 1) {
         emit hasRequest(params.getScript(), params.getParams());
