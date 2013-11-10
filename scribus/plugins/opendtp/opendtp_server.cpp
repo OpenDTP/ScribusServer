@@ -1,44 +1,26 @@
 #include "opendtp_server.h"
 
-OpenDTPServer::OpenDTPServer() {
-  this->working = false;
-}
+OpenDTPServer::OpenDTPServer() {}
 
-void OpenDTPServer::doCommand() {
+void OpenDTPServer::doCommand()
+{
+  OpenDTPLogging      &logger = OpenDTPLogging::getInstance();
   int                 newsockfd;
   socklen_t           clilen;
-  int                 n = 0;
+  struct sockaddr     cli_addr;
   char                buffer[256];
-  OpenDTPParams       params;
-  OpenDTPLogging      &logger = OpenDTPLogging::getInstance();
 
-  clilen = sizeof(this->cli_addr);
-  if ((newsockfd = accept(this->fd, &(this->cli_addr), &clilen))) {
-    bzero(buffer, 256);
-    n = recv(newsockfd, buffer, 255, 0);
-    if (n < 0)
-      return;
-    if (n > 0)
-    {
-      logger.info("Client connection received");
-      if (!this->working) {
-        this->working = true;
-        params.parse(buffer, n);
-        if (params.getParams().size() > 1) {
-          emit hasRequest(params.getScript(), params.getParams());
-          this->response(newsockfd, buffer);
-        }
-        logger.debug("RECEIVED : ");
-        logger.debug(buffer);
-        this->working = false;
-      }
-      else {
-        this->response(newsockfd, "{error_code : 2, error_message : \"Too many requests\"}");
+  if (this->thread->isRunning()) {
+    if ((newsockfd = accept(this->fd, &(cli_addr), &clilen)) > 0) {
+      bzero(buffer, 256);
+      if (recv(newsockfd, buffer, 255, 0) > 0) {
+        this->response(newsockfd, "{error_code : 2, error_message : \"Too many requests\"}\n");
         logger.error("Forbidden connection received : Too many requests");
       }
     }
-    close(newsockfd);
-    logger.info("Closing connection");
+  }
+  else {
+    this->thread->start();
   }
 }
 
@@ -75,6 +57,7 @@ void OpenDTPServer::run()
   }
   listen(this->fd, 42);
   logger.info("Correctly created the socket");
+  this->thread = new SocketThread(this->fd);
 
   connect(&(this->timer), SIGNAL(timeout()), this, SLOT(doCommand()), Qt::DirectConnection);
   this->timer.setInterval(5);

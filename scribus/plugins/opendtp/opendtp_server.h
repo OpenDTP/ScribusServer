@@ -1,5 +1,5 @@
-#ifndef   SCRIBUS_SERVER_H_
-# define   SCRIBUS_SERVER_H_
+#ifndef    __OPENDTP_SERVER_H__
+# define   __OPENDTP_SERVER_H__
 
 # include <sys/types.h>
 # include <sys/socket.h>
@@ -12,6 +12,7 @@
 # include "logging.h"
 # include "opendtp_params.h"
 # include "opendtp_scriptercore.h"
+# include "socket_thread.h"
 
 # define PORT_NUMBER 8080
 # define LOG_FILE "/tmp/opendtp.log"
@@ -28,11 +29,8 @@ private:
 
 	struct sockaddr     cli_addr;
 	int fd;
-  bool working;
 	QTimer timer;
-
-signals:
-     void hasRequest(std::string, std::vector<std::string>);
+  SocketThread *thread;
 
 private slots:
      void doCommand();

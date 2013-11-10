@@ -10,6 +10,7 @@ opendtp_params.h
 opendtp_scriptercore.h
 opendtp_document.h
 logging.h
+socket_thread.h
 )
 
 SET(MY_PLUGIN_SOURCES
@@ -19,6 +20,7 @@ opendtp_params.cpp
 opendtp_scriptercore.cpp
 opendtp_document.cpp
 logging.cpp
+socket_thread.cpp
 )
 
 SET(SCRIBUS_MY_PLUGIN "opendtp")
