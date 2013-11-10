@@ -2,6 +2,10 @@
 
 void OpenDTPLogging::log(std::string const& message, std::string const& level)
 {
+  time_t  t;
+
+  t = time(0);
+  this->current_time = localtime(&t);
 	if (!this->log_stream.is_open()) {
 		this->log_stream.open(LOG_FILE, std::ios_base::out | std::ios_base::app);
 	}
@@ -44,11 +48,6 @@ OpenDTPLogging::~OpenDTPLogging()
 
 OpenDTPLogging::OpenDTPLogging()
 {
-  time_t  t;
-
   // TODO Read it from config file
   this->debug_enabled = true;
-  
-  t = time(0);
-  this->current_time = localtime(&t);
 }
