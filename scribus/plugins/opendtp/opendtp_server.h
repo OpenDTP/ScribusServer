@@ -5,6 +5,7 @@
 # include <sys/socket.h>
 # include <netinet/in.h>
 # include <fcntl.h>
+# include <string>
 
 # include <QThread>
 # include <QTimer>
@@ -25,7 +26,7 @@ public:
   OpenDTPServer();
 private:
 	void run();
-	void response(int, const char *);
+	void response(int, const std::string &);
 
 	struct sockaddr     cli_addr;
 	int fd;

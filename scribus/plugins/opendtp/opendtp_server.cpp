@@ -1,21 +1,22 @@
+#include <string>
 #include "opendtp_server.h"
+#include "JsonResponse.h"
 
 OpenDTPServer::OpenDTPServer() {}
 
 void OpenDTPServer::doCommand()
 {
-  OpenDTPLogging      &logger = OpenDTPLogging::getInstance();
   int                 newsockfd;
   socklen_t           clilen;
   struct sockaddr     cli_addr;
   char                buffer[256];
+  JsonResponse        json;
 
   if (this->thread->isRunning()) {
     if ((newsockfd = accept(this->fd, &(cli_addr), &clilen)) > 0) {
       bzero(buffer, 256);
       if (recv(newsockfd, buffer, 255, 0) > 0) {
-        this->response(newsockfd, "{error_code : 2, error_message : \"Too many requests\"}\n");
-        logger.error("Forbidden connection received : Too many requests");
+        this->response(newsockfd, json.basicResponse(2, "Too many requests"));
       }
       close(newsockfd);
     }
@@ -25,7 +26,7 @@ void OpenDTPServer::doCommand()
   }
 }
 
-void OpenDTPServer::response(int client, const char *str)
+void OpenDTPServer::response(int client, const std::string &str)
 {
   std::string header = "Content-type:text/html\r\n\r\n";
 
