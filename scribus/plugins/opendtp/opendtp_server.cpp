@@ -17,6 +17,7 @@ void OpenDTPServer::doCommand()
         this->response(newsockfd, "{error_code : 2, error_message : \"Too many requests\"}\n");
         logger.error("Forbidden connection received : Too many requests");
       }
+      close(newsockfd);
     }
   }
   else {
