@@ -11,6 +11,9 @@ opendtp_scriptercore.h
 opendtp_document.h
 logging.h
 socket_thread.h
+Jzon.h
+JsonResponse.h
+IResponse.h
 )
 
 SET(MY_PLUGIN_SOURCES
@@ -21,6 +24,8 @@ opendtp_scriptercore.cpp
 opendtp_document.cpp
 logging.cpp
 socket_thread.cpp
+Jzon.cpp
+JsonResponse.cpp
 )
 
 SET(SCRIBUS_MY_PLUGIN "opendtp")
