@@ -1,10 +1,11 @@
-#ifndef   SCRIBUS_SERVER_H_
-# define   SCRIBUS_SERVER_H_
+#ifndef    __OPENDTP_SERVER_H__
+# define   __OPENDTP_SERVER_H__
 
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <netinet/in.h>
 # include <fcntl.h>
+# include <string>
 
 # include <QThread>
 # include <QTimer>
@@ -12,9 +13,11 @@
 # include "logging.h"
 # include "opendtp_params.h"
 # include "opendtp_scriptercore.h"
+# include "socket_thread.h"
 
 # define PORT_NUMBER 8080
 # define LOG_FILE "/tmp/opendtp.log"
+# define HEADER "Content-type:text/html\r\n\r\n"
 
 class OpenDTPServer : public QThread
 {
@@ -24,15 +27,12 @@ public:
   OpenDTPServer();
 private:
 	void run();
-	void response(int, const char *);
+	void response(int, const std::string &);
 
 	struct sockaddr     cli_addr;
 	int fd;
-  bool working;
 	QTimer timer;
-
-signals:
-     void hasRequest(std::string, std::vector<std::string>);
+  SocketThread *thread;
 
 private slots:
      void doCommand();

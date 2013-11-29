@@ -1,48 +1,32 @@
+#include <string>
 #include "opendtp_server.h"
+#include "JsonResponse.h"
 
-OpenDTPServer::OpenDTPServer() {
-  this->working = false;
-}
+OpenDTPServer::OpenDTPServer() {}
 
-void OpenDTPServer::doCommand() {
+void OpenDTPServer::doCommand()
+{
   int                 newsockfd;
   socklen_t           clilen;
-  int                 n = 0;
+  struct sockaddr     cli_addr;
   char                buffer[256];
-  OpenDTPParams       params;
-  OpenDTPLogging      &logger = OpenDTPLogging::getInstance();
+  JsonResponse        json;
 
-  clilen = sizeof(this->cli_addr);
-  if ((newsockfd = accept(this->fd, &(this->cli_addr), &clilen))) {
-    bzero(buffer, 256);
-    n = recv(newsockfd, buffer, 255, 0);
-    if (n < 0)
-      return;
-    if (n > 0)
-    {
-      logger.info("Client connection received");
-      if (!this->working) {
-        this->working = true;
-        params.parse(buffer, n);
-        if (params.getParams().size() > 1) {
-          emit hasRequest(params.getScript(), params.getParams());
-          this->response(newsockfd, buffer);
-          this->working = false;
-        }
-        logger.debug("RECEIVED : ");
-        logger.debug(buffer);
+  if (this->thread->isRunning()) {
+    if ((newsockfd = accept(this->fd, &(cli_addr), &clilen)) > 0) {
+      bzero(buffer, 256);
+      if (recv(newsockfd, buffer, 255, 0) > 0) {
+        this->response(newsockfd, json.basicResponse(2, "Too many requests"));
       }
-      else {
-        this->response(newsockfd, "{error_code : 2, error_message : \"Too many requests\"}");
-        logger.error("Forbidden connection received : Too many requests");
-      }
+      close(newsockfd);
     }
-    close(newsockfd);
-    logger.info("Closing connection");
+  }
+  else {
+    this->thread->start();
   }
 }
 
-void OpenDTPServer::response(int client, const char *str)
+void OpenDTPServer::response(int client, const std::string &str)
 {
   std::string header = "Content-type:text/html\r\n\r\n";
 
@@ -75,6 +59,7 @@ void OpenDTPServer::run()
   }
   listen(this->fd, 42);
   logger.info("Correctly created the socket");
+  this->thread = new SocketThread(this->fd);
 
   connect(&(this->timer), SIGNAL(timeout()), this, SLOT(doCommand()), Qt::DirectConnection);
   this->timer.setInterval(5);
