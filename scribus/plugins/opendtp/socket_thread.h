@@ -16,7 +16,7 @@ public:
   void  run();
 
 private:
-  void response(int, const char *);
+  void response(int, const std::string &);
 
   int fd;
 

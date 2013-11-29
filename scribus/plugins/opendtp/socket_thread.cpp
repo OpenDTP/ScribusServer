@@ -1,5 +1,7 @@
+#include <cstring>
 #include "opendtp_server.h"
 #include "socket_thread.h"
+#include "JsonResponse.h"
 
 SocketThread::SocketThread(int fd)
 {
@@ -15,6 +17,8 @@ void SocketThread::run()
   char                buffer[256];
   OpenDTPParams       params;
   OpenDTPLogging      &logger = OpenDTPLogging::getInstance();
+  JsonResponse        json;
+  std::string         rep;
 
   clilen = sizeof(cli_addr);
   if ((newsockfd = accept(this->fd, &(cli_addr), &clilen)) > 0) {
@@ -28,19 +32,21 @@ void SocketThread::run()
       params.parse(buffer, n);
       if (params.getParams().size() > 1) {
         emit hasRequest(params.getScript(), params.getParams());
-        this->response(newsockfd, buffer);
+        rep = buffer;
+        rep += json.basicResponse(200, "OK");
+        this->response(newsockfd, rep);
       }
-      logger.debug("RECEIVED : ");
-      logger.debug(buffer);
+      else
+        this->response(newsockfd, json.basicResponse(200, "OK"));
     }
     close(newsockfd);
     logger.info("Closing connection");
   }
 }
 
-void SocketThread::response(int client, const char *str)
+void SocketThread::response(int client, const std::string &str)
 {
-  std::string header = "Content-type:text/html\r\n\r\n";
+  std::string header = HEADER;
 
   header += str;
   write(client, header.c_str(), header.length());
