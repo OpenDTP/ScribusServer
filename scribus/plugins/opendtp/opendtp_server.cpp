@@ -28,7 +28,7 @@ void OpenDTPServer::doCommand()
 
 void OpenDTPServer::response(int client, const std::string &str)
 {
-  std::string header = "Content-type:text/html\r\n\r\n";
+  std::string header = HEADER;
 
   header += str;
   write(client, header.c_str(), header.length());
