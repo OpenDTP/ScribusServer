@@ -4,15 +4,15 @@ to the COPYING file provided with the program. Following this notice may exist
 a copyright and/or license notice that predates the release of Scribus 1.3.2
 for which a new license (GPL+exception) is in place.
 */
-#include "OpenDTP.h"
+#include "opendtp.h"
 
-OpenDTP::OpenDTP() : ScActionPlugin()
+OpenDtp::OpenDtp() : ScActionPlugin()
 {
 	languageChange();
 	runServer();
 }
 
-OpenDTP::~OpenDTP() {
+OpenDtp::~OpenDtp() {
 	OpenDTPLogging      &logger = OpenDTPLogging::getInstance();
 
 	logger.info("Shutting down server");
@@ -22,7 +22,7 @@ OpenDTP::~OpenDTP() {
 	delete this->scripterCore;
 };
 
-void OpenDTP::languageChange()
+void OpenDtp::languageChange()
 {
 	m_actionInfo.name = "OpenDTP";
 	m_actionInfo.text = tr("OpenDTP Server");
@@ -31,31 +31,31 @@ void OpenDTP::languageChange()
 	m_actionInfo.enabledOnStartup = true;
 }
 
-const QString OpenDTP::fullTrName() const
+const QString OpenDtp::fullTrName() const
 {
 	return QObject::tr("OpenDTP");
 }
 
-const ScActionPlugin::AboutData* OpenDTP::getAboutData() const
+const ScActionPlugin::AboutData* OpenDtp::getAboutData() const
 {
 	AboutData* about = new AboutData;
 	Q_CHECK_PTR(about);
 	return about;
 }
 
-void OpenDTP::deleteAboutData(const AboutData* about) const
+void OpenDtp::deleteAboutData(const AboutData* about) const
 {
 	Q_ASSERT(about);
 	delete about;
 }
 
 // here will be pannels for configuration
-bool OpenDTP::run(ScribusDoc* doc, QString target)
+bool OpenDtp::run(ScribusDoc* doc, QString target)
 {
 	return true;
 }
 
-void OpenDTP::runServer() {
+void OpenDtp::runServer() {
 	this->server = new OpenDTPServer();
 	this->scripterCore = new OpenDTPScripterCore();
 
@@ -73,14 +73,14 @@ int opendtp_getPluginAPIVersion()
 
 ScPlugin* opendtp_getPlugin()
 {
-	OpenDTP* plug = new OpenDTP();
+	OpenDtp* plug = new OpenDtp();
 	Q_CHECK_PTR(plug);
 	return plug;
 }
 
 void opendtp_freePlugin(ScPlugin* plugin)
 {
-	OpenDTP* plug = dynamic_cast<OpenDTP*>(plugin);
+	OpenDtp* plug = dynamic_cast<OpenDtp*>(plugin);
 	Q_ASSERT(plug);
 	delete plug;
 }

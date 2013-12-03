@@ -13,15 +13,15 @@ for which a new license (GPL+exception) is in place.
 # include "scplugin.h"
 # include "opendtp_server.h"
 
-class PLUGIN_API OpenDTP : public ScActionPlugin
+class PLUGIN_API OpenDtp : public ScActionPlugin
 {
 	Q_OBJECT
 	OpenDTPServer *server;
 	OpenDTPScripterCore *scripterCore;
 
 	public:
-		OpenDTP();
-		virtual ~OpenDTP();
+		OpenDtp();
+		virtual ~OpenDtp();
 
 		virtual bool run(ScribusDoc* doc, QString target = QString::null);
 		virtual const QString fullTrName() const;
