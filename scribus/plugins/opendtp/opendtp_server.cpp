@@ -60,4 +60,3 @@ void OpenDTPServer::run()
   this->timer.stop();
 
 }
-

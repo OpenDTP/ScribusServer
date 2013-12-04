@@ -1,3 +1,4 @@
+#include    <sstream>
 #include    "JsonResponse.h"
 
 JsonResponse::JsonResponse()
@@ -5,9 +6,18 @@ JsonResponse::JsonResponse()
 
 }
 
-const std::string &JsonResponse::getHttpHeader()
+std::string JsonResponse::getHttpHeader(int content_length)
 {
-   
+  std::string    response;
+  std::ostringstream oss;
+
+  oss << content_length;
+  response = "HTTP/1.1 200 OK\r\n";
+  response += "Content-Type: application/json; charset=utf-8\r\n";
+  response += "Content-Length: ";
+  response += oss.str();
+  response += "\r\nServer: Scribus\r\n\r\n";
+  return response;
 }
 
 void        JsonResponse::addElem(const std::string &key, const std::string &value)
@@ -31,12 +41,15 @@ void        JsonResponse::sendResponse(int client)
 {
   OpenDTPLogging      &logger = OpenDTPLogging::getInstance();
   Jzon::Writer writer(this->root, Jzon::StandardFormat);
-  std::string resp = HEADER;
+  std::string response;
+  std::string content;
 
   writer.Write();
+  content = writer.GetResult();
   logger.info("Json sending a response :");
-  logger.info(writer.GetResult());
-  resp += writer.GetResult();
-  if (write(client, resp.c_str(), resp.length()) == -1)
+  logger.info(content);
+  response = this->getHttpHeader(content.length());
+  response += content;
+  if (write(client, response.c_str(), response.length()) == -1)
     logger.error("Could not send a response to the client");
 }
