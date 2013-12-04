@@ -16,7 +16,7 @@ void OpenDTPServer::doCommand()
     if ((newsockfd = accept(this->fd, &(cli_addr), &clilen)) > 0) {
       bzero(buffer, 256);
       if (recv(newsockfd, buffer, 255, 0) > 0) {
-        this->response(newsockfd, json.basicResponse(2, "Too many requests"));
+        json.basicResponse(newsockfd, 2, "Too many requests");
       }
       close(newsockfd);
     }
@@ -24,14 +24,6 @@ void OpenDTPServer::doCommand()
   else {
     this->thread->start();
   }
-}
-
-void OpenDTPServer::response(int client, const std::string &str)
-{
-  std::string header = HEADER;
-
-  header += str;
-  write(client, header.c_str(), header.length());
 }
 
 void OpenDTPServer::run()

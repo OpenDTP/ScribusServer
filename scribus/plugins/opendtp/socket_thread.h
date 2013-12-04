@@ -16,8 +16,6 @@ public:
   void  run();
 
 private:
-  void response(int, const std::string &);
-
   int fd;
 
 signals:

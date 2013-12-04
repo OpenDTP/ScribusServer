@@ -17,7 +17,6 @@
 
 # define PORT_NUMBER 8080
 # define LOG_FILE "/tmp/opendtp.log"
-# define HEADER "Content-type:text/html\r\n\r\n"
 
 class OpenDTPServer : public QThread
 {
@@ -27,7 +26,6 @@ public:
   OpenDTPServer();
 private:
 	void run();
-	void response(int, const std::string &);
 
 	struct sockaddr     cli_addr;
 	int fd;
