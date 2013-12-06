@@ -8,12 +8,19 @@ JsonResponse::JsonResponse()
 
 std::string JsonResponse::getHttpHeader(int content_length)
 {
-  std::string    response;
-  std::ostringstream oss;
+  std::string         response;
+  std::ostringstream  oss;
+  time_t              now;
+  struct tm           tm;
+  char                buf[100];
 
+  now = time(0);
+  tm = *gmtime(&now);
+  strftime(buf, sizeof(buf), "%a, %d %b %Y %H:%M:%S %Z", &tm);
   oss << content_length;
-  response = "HTTP/1.1 200 OK\r\n";
-  response += "Content-Type: application/json; charset=utf-8\r\n";
+  response = "HTTP/1.1 200 OK\r\nDate: ";
+  response += buf;
+  response += "\r\nContent-Type: application/json; charset=utf-8\r\n";
   response += "Content-Length: ";
   response += oss.str();
   response += "\r\nServer: Scribus\r\n\r\n";

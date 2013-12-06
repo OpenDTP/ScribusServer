@@ -1,6 +1,8 @@
 #ifndef     __JSONRESPONSE_H__
 # define    __JSONRESPONSE_H__
 
+#include    <ctime>
+
 #include    "IResponse.h"
 #include    "Jzon.h"
 #include    "logging.h"
