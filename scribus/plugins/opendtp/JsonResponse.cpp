@@ -1,8 +1,30 @@
+#include    <sstream>
 #include    "JsonResponse.h"
 
 JsonResponse::JsonResponse()
 {
 
+}
+
+std::string JsonResponse::getHttpHeader(int content_length)
+{
+  std::string         response;
+  std::ostringstream  oss;
+  time_t              now;
+  struct tm           tm;
+  char                buf[100];
+
+  now = time(0);
+  tm = *gmtime(&now);
+  strftime(buf, sizeof(buf), "%a, %d %b %Y %H:%M:%S %Z", &tm);
+  oss << content_length;
+  response = "HTTP/1.1 200 OK\r\nDate: ";
+  response += buf;
+  response += "\r\nContent-Type: application/json; charset=utf-8\r\n";
+  response += "Content-Length: ";
+  response += oss.str();
+  response += "\r\nServer: Scribus\r\n\r\n";
+  return response;
 }
 
 void        JsonResponse::addElem(const std::string &key, const std::string &value)
@@ -15,20 +37,26 @@ void        JsonResponse::addElem(const std::string &key, int value)
   this->root.Add(key, value);
 }
 
-std::string JsonResponse::basicResponse(int error_code, const std::string &error_message)
+void        JsonResponse::basicResponse(int client, int error_code, const std::string &error_message)
 {
   this->addElem("error_code", error_code);
   this->addElem("error_message", error_message);
-  return this->sendResponse();
+  return this->sendResponse(client);
 }
 
-std::string JsonResponse::sendResponse()
+void        JsonResponse::sendResponse(int client)
 {
   OpenDTPLogging      &logger = OpenDTPLogging::getInstance();
   Jzon::Writer writer(this->root, Jzon::StandardFormat);
+  std::string response;
+  std::string content;
 
   writer.Write();
+  content = writer.GetResult();
   logger.info("Json sending a response :");
-  logger.info(writer.GetResult());
-  return writer.GetResult();
+  logger.info(content);
+  response = this->getHttpHeader(content.length());
+  response += content;
+  if (write(client, response.c_str(), response.length()) == -1)
+    logger.error("Could not send a response to the client");
 }
