@@ -1,7 +1,5 @@
 #include "opendtp_params.h"
 
-#include <iostream>
-
 OpenDTPParams::OpenDTPParams() {}
 
 OpenDTPParams::~OpenDTPParams() {}
@@ -26,14 +24,14 @@ void OpenDTPParams::loadURL(std::string &line) {
 	start = line.find_first_of(' ');
 	end = line.find_last_of(' ');
 	this->url = line.substr((start + 1), (end - start - 1));
-
 	pos = 0;
 	end = 0;
 	this->params.reserve(10);
 	while (end < this->url.length()) {
 		start = this->url.find('/', pos);
 		end = this->url.find('/', start + 1);
-		this->params.push_back(this->url.substr((start + 1), (end - start - 1)));
+		if (end != std::string::npos || start + 1 != this->url.size())
+			this->params.push_back(this->url.substr((start + 1), (end - start - 1)));
 		pos = start + 1;
 	}
 }
