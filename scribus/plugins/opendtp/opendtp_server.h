@@ -24,6 +24,7 @@ class OpenDTPServer : public QThread
 
 public:
   OpenDTPServer();
+  SocketThread *getThread();
 private:
 	void run();
 
@@ -34,6 +35,7 @@ private:
 
 private slots:
      void doCommand();
+
 };
 
 Q_DECLARE_METATYPE(std::string);

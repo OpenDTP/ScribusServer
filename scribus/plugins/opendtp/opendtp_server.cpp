@@ -2,7 +2,15 @@
 #include "opendtp_server.h"
 #include "JsonResponse.h"
 
-OpenDTPServer::OpenDTPServer() {}
+OpenDTPServer::OpenDTPServer()
+{
+  this->thread = new SocketThread();
+}
+
+SocketThread  *OpenDTPServer::getThread()
+{
+  return (this->thread);
+}
 
 void OpenDTPServer::doCommand()
 {
@@ -11,6 +19,8 @@ void OpenDTPServer::doCommand()
   struct sockaddr     cli_addr;
   char                buffer[256];
   JsonResponse        json;
+  std::string s;
+  std::vector<std::string> v;
 
   if (this->thread->isRunning()) {
     if ((newsockfd = accept(this->fd, &(cli_addr), &clilen)) > 0) {
@@ -51,7 +61,7 @@ void OpenDTPServer::run()
   }
   listen(this->fd, 42);
   logger.info("Correctly created the socket");
-  this->thread = new SocketThread(this->fd);
+  this->thread->setFd(this->fd);
 
   connect(&(this->timer), SIGNAL(timeout()), this, SLOT(doCommand()), Qt::DirectConnection);
   this->timer.setInterval(5);

@@ -3,7 +3,12 @@
 #include "socket_thread.h"
 #include "JsonResponse.h"
 
-SocketThread::SocketThread(int fd)
+SocketThread::SocketThread()
+{
+
+}
+
+void SocketThread::setFd(int fd)
 {
   this->fd = fd;
 }

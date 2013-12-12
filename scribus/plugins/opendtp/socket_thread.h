@@ -12,8 +12,9 @@ class SocketThread : public QThread
   Q_OBJECT
 
 public:
-  SocketThread(int);
+  SocketThread();
   void  run();
+  void  setFd(int);
 
 private:
   int fd;
