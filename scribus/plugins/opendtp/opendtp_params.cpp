@@ -34,6 +34,8 @@ void OpenDTPParams::loadURL(std::string &line) {
 			this->params.push_back(this->url.substr((start + 1), (end - start - 1)));
 		pos = start + 1;
 	}
+	if (this->params.size() > 0)
+		this->params[0].append(".py");
 }
 
 const std::string &OpenDTPParams::getScript() {
