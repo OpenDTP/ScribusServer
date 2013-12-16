@@ -32,22 +32,12 @@ void SocketThread::run()
       params.parse(buffer, n);
       if (params.getParams().size() > 1) {
         emit hasRequest(params.getScript(), params.getParams());
-        rep = buffer;
-        rep += json.basicResponse(200, "OK");
-        this->response(newsockfd, rep);
+        json.basicResponse(newsockfd, 200, "OK");
       }
       else
-        this->response(newsockfd, json.basicResponse(200, "OK"));
+        json.basicResponse(newsockfd, 200, "OK");
     }
     close(newsockfd);
     logger.info("Closing connection");
   }
-}
-
-void SocketThread::response(int client, const std::string &str)
-{
-  std::string header = HEADER;
-
-  header += str;
-  write(client, header.c_str(), header.length());
 }
