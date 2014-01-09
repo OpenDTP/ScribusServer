@@ -5,6 +5,7 @@
 # include <vector>
 # include <sys/socket.h>
 # include <sstream>
+# include <cstdlib>
 
 class OpenDTPParams {
 
@@ -18,7 +19,7 @@ public:
 
 private:
 	void loadURL(std::string &);
-
+	void decodeURL(std::string &);
 	std::string request;
 	std::string url;
 	std::string scriptName;
