@@ -285,7 +285,7 @@ void OpenDTPScripterCore::runScriptFile(std::string script, std::vector<std::str
 	PyThreadState* global_state = NULL;
 	PyThreadState* state = NULL;
 	std::string header;
-	PyObject *m, *d;
+	PyObject *m, *s;
 	OpenDTPLogging &logger = OpenDTPLogging::getInstance();
 
 	logger.info("Starting scripter initialisation");
@@ -296,7 +296,7 @@ void OpenDTPScripterCore::runScriptFile(std::string script, std::vector<std::str
 
 	// Adding modules
 	m = PyImport_AddModule((char*)"__main__");
-	PyImport_AddModule((char*)"scribus");
+	s = PyImport_AddModule((char*)"scribus");
 
 	// Custom objects initialisation
 	PyType_Ready(&Printer_Type);
@@ -311,16 +311,14 @@ void OpenDTPScripterCore::runScriptFile(std::string script, std::vector<std::str
 	PyModule_AddObject(m, (char*)"PDFfile", (PyObject *) &PDFfile_Type);
 	Py_INCREF(&ImageExport_Type);
 	PyModule_AddObject(m, (char*)"ImageExport", (PyObject *) &ImageExport_Type);
-	
-	// Dictionnary for globals
-	d = PyModule_GetDict(m);
-	PyDict_SetItemString(d, const_cast<char*>("scribus_version"), PyString_FromString(const_cast<char*>(VERSION)));
 
 	if (m == NULL) {
 		logger.error("Failed to get __main__ - aborting script");
 		return;
 	}
 	PyObject* globals = PyModule_GetDict(m);
+	PyObject* scribus_globals = PyModule_GetDict(s);
+	PyDict_SetItemString(scribus_globals, const_cast<char*>("scribus_version"), PyString_FromString(const_cast<char*>("1.4.3")));
 
 	header = this->getHeader(SCRIPTS_PATH, script);
 	logger.debug("Header set :");
