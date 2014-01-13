@@ -22,6 +22,8 @@
 #include "../scriptplugin/cmdtext.h"
 #include "../scriptplugin/cmdutil.h"
 #include "../scriptplugin/cmdstyle.h"
+#include "../scriptplugin/svgimport.h"
+#include "../scriptplugin/guiapp.h"
 
 // Scribus objects for python
 #include "../scriptplugin/objimageexport.h"

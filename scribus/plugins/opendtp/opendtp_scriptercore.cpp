@@ -1,95 +1,27 @@
 #include "opendtp_scriptercore.h"
 
-PageItem* getPageItemByName(QString name)
-{
-  if (name.length() == 0)
-  {
-    PyErr_SetString(PyExc_ValueError, QString("Cannot accept empty name for pageitem").toLocal8Bit().constData());
-    return NULL;
-  }
-  for (int j = 0; j<ScCore->primaryMainWindow()->doc->Items->count(); j++)
-  {
-    if (name==ScCore->primaryMainWindow()->doc->Items->at(j)->itemName())
-      return ScCore->primaryMainWindow()->doc->Items->at(j);
-  } // for items
-  return NULL;
-}
+// /*static */PyObject *opendtp_retval(PyObject* /*self*/, PyObject* args)
+// {
+// 	char *Name = NULL;
+// 	if (!PyArg_ParseTuple(args, (char*)"s", &Name))
+// 		return NULL;
+// 	// Because sysdefaultencoding is not utf-8, Python is returning utf-8 encoded
+// 	// 8-bit char* strings. Make sure Qt understands that the input is utf-8 not
+// 	// the default local encoding (usually latin-1) by using QString::fromUtf8()
+// 	/*RetString = QString::fromUtf8(Name);
+// 	RetVal = retV;*/
+// 	scripterCore->returnString = QString::fromUtf8(Name);
+// 	return PyInt_FromLong(0L);
+// }
 
-PyObject *opendtp_savepageeps(PyObject* /* self */, PyObject* args)
-{
-	char *Name;
-	if (!PyArg_ParseTuple(args, "es", "utf-8", &Name))
-		return PyBool_FromLong(static_cast<long>(false));
-	QString epsError;
-
-	bool ret = true;
-	return PyBool_FromLong(static_cast<long>(ret));
-}
-
-PyObject *opendtp_opendoc(PyObject* /* self */, PyObject* args)
-{
-  char *Name;
-  if (!PyArg_ParseTuple(args, "es", "utf-8", &Name))
-    return PyBool_FromLong(static_cast<long>(false));
-  bool ret = ScCore->primaryMainWindow()->loadDoc(QString::fromUtf8(Name));
-  return PyBool_FromLong(static_cast<long>(ret));
-}
-
-PyObject *opendtp_closedoc(PyObject* /* self */)
-{
-  if(!ScCore->primaryMainWindow()->HaveDoc)
-    return PyBool_FromLong(static_cast<long>(false));
-  ScCore->primaryMainWindow()->doc->setModified(false);
-  bool ret = ScCore->primaryMainWindow()->slotFileClose();
-  qApp->processEvents();
-  return PyInt_FromLong(static_cast<long>(ret));
-}
-
-PyObject *opendtp_setboxtext(PyObject* /* self */, PyObject* args)
-{
-  char *Name = const_cast<char*>("");
-  char *Text;
-  if (!PyArg_ParseTuple(args, "es|es", "utf-8", &Text, "utf-8", &Name))
-    return PyBool_FromLong(static_cast<long>(false));
-  if(!ScCore->primaryMainWindow()->HaveDoc)
-    return PyBool_FromLong(static_cast<long>(false));
-  PageItem *currItem = getPageItemByName(QString::fromUtf8(Name));
-  if (currItem == NULL)
-    return PyBool_FromLong(static_cast<long>(false));
-  if (!(currItem->asTextFrame()) && !(currItem->asPathText()))
-  {
-    return PyBool_FromLong(static_cast<long>(false));
-  }
-  QString Daten = QString::fromUtf8(Text);
-  Daten.replace("\r\n", SpecialChars::PARSEP);
-  Daten.replace(QChar('\n') , SpecialChars::PARSEP);
-  PyMem_Free(Text);
-  currItem->itemText.clear();
-  for (int a = 0; a < ScCore->primaryMainWindow()->doc->FrameItems.count(); ++a)
-  {
-    ScCore->primaryMainWindow()->doc->FrameItems.at(a)->ItemNr = a;
-  }
-  currItem->itemText.insertChars(0, Daten);
-  currItem->invalidateLayout();
-  currItem->Dirty = false;
-//  Py_INCREF(Py_None);
-//  return Py_None;
-  Py_RETURN_NONE;
-}
-
-PyObject *opendtp_savedoc(PyObject* /* self */)
-{
-  if(!ScCore->primaryMainWindow()->HaveDoc)
-    return PyBool_FromLong(static_cast<long>(false));
-  ScCore->primaryMainWindow()->slotFileSave();
-//  Py_INCREF(Py_None);
-//  return Py_None;
-  Py_RETURN_NONE;
-}
+// /*static */PyObject *opendtp_getval(PyObject* /*self*/)
+// {
+// 	return PyString_FromString(scripterCore->inValue.toUtf8().data());
+// }
 
 PyMethodDef scribus_methods[] = {
 	{const_cast<char*>("changeColor"), (PyCFunction)scribus_setcolor, METH_VARARGS, NULL},
-	{const_cast<char*>("closeDoc"), (PyCFunction)scribus_closedoc, METH_NOARGS, NULLNULL},
+	{const_cast<char*>("closeDoc"), (PyCFunction)scribus_closedoc, METH_NOARGS, NULL},
 	{const_cast<char*>("closeMasterPage"), (PyCFunction)scribus_closemasterpage, METH_NOARGS, NULL},
 	{const_cast<char*>("createBezierLine"), (PyCFunction)scribus_bezierline, METH_VARARGS, NULL},
 	{const_cast<char*>("createEllipse"), (PyCFunction)scribus_newellipse, METH_VARARGS, NULL},
@@ -203,13 +135,13 @@ PyMethodDef scribus_methods[] = {
 	{const_cast<char*>("newStyleDialog"), (PyCFunction)scribus_newstyledialog, METH_NOARGS, NULL},
 	{const_cast<char*>("objectExists"),(PyCFunction)scribus_objectexists, METH_VARARGS, NULL},
 	{const_cast<char*>("openDoc"), (PyCFunction)scribus_opendoc, METH_VARARGS, NULL},
-	{const_cast<char*>("pageCount"), (PyCFunction)scribus_pagecount, METH_NOARGS, NULL}},
-	{const_cast<char*>("pageDimension"), (PyCFunction)scribus_pagedimension, METH_NOARGS, NULL}},
-	{const_cast<char*>("progressReset"), (PyCFunction)scribus_progressreset, METH_NOARGS, NULL}},
-	{const_cast<char*>("progressSet"), (PyCFunction)scribus_progresssetprogress, METH_VARARGS, NULL}},
-	{const_cast<char*>("progressTotal"), (PyCFunction)scribus_progresssettotalsteps, METH_VARARGS, NULL}},
-	{const_cast<char*>("redrawAll"), (PyCFunction)scribus_redraw, METH_NOARGS, NULL}},
-	{const_cast<char*>("renderFont"), (PyCFunction)scribus_renderfont, METH_KEYWORDS, NULL}},
+	{const_cast<char*>("pageCount"), (PyCFunction)scribus_pagecount, METH_NOARGS, NULL},
+	{const_cast<char*>("pageDimension"), (PyCFunction)scribus_pagedimension, METH_NOARGS, NULL},
+	{const_cast<char*>("progressReset"), (PyCFunction)scribus_progressreset, METH_NOARGS, NULL},
+	{const_cast<char*>("progressSet"), (PyCFunction)scribus_progresssetprogress, METH_VARARGS, NULL},
+	{const_cast<char*>("progressTotal"), (PyCFunction)scribus_progresssettotalsteps, METH_VARARGS, NULL},
+	{const_cast<char*>("redrawAll"), (PyCFunction)scribus_redraw, METH_NOARGS, NULL},
+	{const_cast<char*>("renderFont"), (PyCFunction)scribus_renderfont, METH_KEYWORDS, NULL},
 	{const_cast<char*>("replaceColor"), (PyCFunction)scribus_replcolor, METH_VARARGS, NULL},
 	{const_cast<char*>("rotateObjectAbs"), (PyCFunction)scribus_rotobjabs, METH_VARARGS, NULL},
 	{const_cast<char*>("rotateObject"), (PyCFunction)scribus_rotobjrel, METH_VARARGS, NULL},
@@ -294,8 +226,8 @@ PyMethodDef scribus_methods[] = {
 	{const_cast<char*>("getProperty"), (PyCFunction)scribus_getproperty, METH_KEYWORDS, NULL},
 	{const_cast<char*>("setProperty"), (PyCFunction)scribus_setproperty, METH_KEYWORDS, NULL},
 	{const_cast<char*>("duplicateObject"), (PyCFunction)scribus_duplicateobject, METH_VARARGS, NULL},
-	{const_cast<char*>("retval"), (PyCFunction)scribus_retval, METH_VARARGS, const_cast<char*>("Scribus internal.")},
-	{const_cast<char*>("getval"), (PyCFunction)scribus_getval, METH_NOARGS, const_cast<char*>("Scribus internal.")},
+	// {const_cast<char*>("retval"), (PyCFunction)opendtp_retval, METH_VARARGS, const_cast<char*>("Scribus internal.")},
+	// {const_cast<char*>("getval"), (PyCFunction)opendtp_getval, METH_NOARGS, const_cast<char*>("Scribus internal.")},
 	{NULL, (PyCFunction)(0), 0, NULL}
 };
 
@@ -353,6 +285,7 @@ void OpenDTPScripterCore::runScriptFile(std::string script, std::vector<std::str
 	PyThreadState* global_state = NULL;
 	PyThreadState* state = NULL;
 	std::string header;
+	PyObject *m, *s;
 	OpenDTPLogging &logger = OpenDTPLogging::getInstance();
 
 	logger.info("Starting scripter initialisation");
@@ -361,9 +294,23 @@ void OpenDTPScripterCore::runScriptFile(std::string script, std::vector<std::str
 	state = Py_NewInterpreter();
 	this->setParams(params);
 
-	PyObject* m = PyImport_AddModule((char*)"__main__");
+	// Adding modules
+	m = PyImport_AddModule((char*)"__main__");
 	PyImport_AddModule((char*)"scribus");
+
+	// Custom objects initialisation
+	PyType_Ready(&Printer_Type);
+	PyType_Ready(&PDFfile_Type);
+	PyType_Ready(&ImageExport_Type);
+
+	// Initialise scribus module
 	Py_InitModule((char*)"scribus", scribus_methods);
+	Py_INCREF(&Printer_Type);
+	PyModule_AddObject(m, (char*)"Printer", (PyObject *) &Printer_Type);
+	Py_INCREF(&PDFfile_Type);
+	PyModule_AddObject(m, (char*)"PDFfile", (PyObject *) &PDFfile_Type);
+	Py_INCREF(&ImageExport_Type);
+	PyModule_AddObject(m, (char*)"ImageExport", (PyObject *) &ImageExport_Type);
 
 	if (m == NULL) {
 		logger.error("Failed to get __main__ - aborting script");
