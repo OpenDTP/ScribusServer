@@ -98,7 +98,6 @@ PyMethodDef scribus_methods[] = {
 
 std::string OpenDTPScripterCore::getHeader(const std::string &scriptPath, const std::string &scriptName) {
 	std::string header;
-	OpenDTPLogging &logger = OpenDTPLogging::getInstance();
 
 	header = "import sys\n";
 	header += "import cStringIO\n";

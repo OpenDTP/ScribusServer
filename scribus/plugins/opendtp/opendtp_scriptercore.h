@@ -8,7 +8,7 @@
 # include "logging.h"
 # include "scribuscore.h"
 
-# define SCRIPTS_PATH "/Users/detass_g/Etna/EIP/opendtpscribus/scribus/plugins/opendtp/"
+# define SCRIPTS_PATH "/data/scripts/"
 
 class OpenDTPScripterCore : public QObject {
 	Q_OBJECT
