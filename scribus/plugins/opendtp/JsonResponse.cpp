@@ -1,4 +1,5 @@
 #include    <sstream>
+#include    <unistd.h>
 #include    "JsonResponse.h"
 
 JsonResponse::JsonResponse()

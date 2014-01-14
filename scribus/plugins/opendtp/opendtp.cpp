@@ -61,7 +61,7 @@ void OpenDtp::runServer() {
 
 	qRegisterMetaType<std::string>();
 	qRegisterMetaType<std::vector<std::string> >();
-	QObject::connect(this->server, SIGNAL(hasRequest(std::string, std::vector<std::string>)),
+	QObject::connect(this->server->getThread(), SIGNAL(hasRequest(std::string, std::vector<std::string>)),
 		this->scripterCore, SLOT(runScriptFile(std::string, std::vector<std::string>)), Qt::QueuedConnection);
 	this->server->start();
 }

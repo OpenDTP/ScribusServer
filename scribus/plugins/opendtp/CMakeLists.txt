@@ -14,6 +14,24 @@ socket_thread.h
 Jzon.h
 JsonResponse.h
 IResponse.h
+../scriptplugin/cmdcolor.h
+../scriptplugin/cmddoc.h
+../scriptplugin/cmdgetprop.h
+../scriptplugin/cmdgetsetprop.h
+../scriptplugin/cmdmani.h
+../scriptplugin/cmdmisc.h
+../scriptplugin/cmdobj.h
+../scriptplugin/cmdpage.h
+../scriptplugin/cmdsetprop.h
+../scriptplugin/cmdstyle.h
+../scriptplugin/cmdtext.h
+../scriptplugin/cmdutil.h
+../scriptplugin/cmdvar.h
+../scriptplugin/svgimport.h
+../scriptplugin/guiapp.h
+../scriptplugin/objimageexport.h
+../scriptplugin/objpdffile.h
+../scriptplugin/objprinter.h
 )
 
 SET(MY_PLUGIN_SOURCES
@@ -26,6 +44,23 @@ logging.cpp
 socket_thread.cpp
 Jzon.cpp
 JsonResponse.cpp
+../scriptplugin/cmdcolor.cpp
+../scriptplugin/cmddoc.cpp
+../scriptplugin/cmdgetprop.cpp
+../scriptplugin/cmdgetsetprop.cpp
+../scriptplugin/cmdmani.cpp
+../scriptplugin/cmdmisc.cpp
+../scriptplugin/cmdobj.cpp
+../scriptplugin/cmdpage.cpp
+../scriptplugin/cmdsetprop.cpp
+../scriptplugin/cmdstyle.cpp
+../scriptplugin/cmdtext.cpp
+../scriptplugin/cmdutil.cpp
+../scriptplugin/svgimport.cpp
+../scriptplugin/guiapp.cpp
+../scriptplugin/objimageexport.cpp
+../scriptplugin/objpdffile.cpp
+../scriptplugin/objprinter.cpp
 )
 
 SET(SCRIBUS_MY_PLUGIN "opendtp")

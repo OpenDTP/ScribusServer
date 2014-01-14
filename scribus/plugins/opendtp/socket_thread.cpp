@@ -3,7 +3,12 @@
 #include "socket_thread.h"
 #include "JsonResponse.h"
 
-SocketThread::SocketThread(int fd)
+SocketThread::SocketThread()
+{
+
+}
+
+void SocketThread::setFd(int fd)
 {
   this->fd = fd;
 }
@@ -30,12 +35,12 @@ void SocketThread::run()
     {
       logger.info("Client connection received");
       params.parse(buffer, n);
-      if (params.getParams().size() > 1) {
+      if (params.getParams().size() >= 1) {
         emit hasRequest(params.getScript(), params.getParams());
         json.basicResponse(newsockfd, 200, "OK");
       }
       else
-        json.basicResponse(newsockfd, 200, "OK");
+        json.basicResponse(newsockfd, 200, "no argument received");
     }
     close(newsockfd);
     logger.info("Closing connection");
