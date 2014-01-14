@@ -1,6 +1,7 @@
 #include <string>
 #include "opendtp_server.h"
 #include "JsonResponse.h"
+#include "Configuration.h"
 
 OpenDTPServer::OpenDTPServer()
 {
@@ -40,6 +41,7 @@ void OpenDTPServer::run()
 {
 
   OpenDTPLogging &logger = OpenDTPLogging::getInstance();
+  Configuration &conf = Configuration::getInstance();
   struct sockaddr_in serv_addr;
 
   logger.info("Trying to create the socket");
@@ -53,7 +55,7 @@ void OpenDTPServer::run()
   bzero((char *) &serv_addr, sizeof(serv_addr));
   serv_addr.sin_family = AF_INET;
   serv_addr.sin_addr.s_addr = INADDR_ANY;
-  serv_addr.sin_port = htons(PORT_NUMBER);
+  serv_addr.sin_port = htons(conf.getInt("port"));
   if (bind(this->fd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
   {
     logger.error("Error binding the socket");
