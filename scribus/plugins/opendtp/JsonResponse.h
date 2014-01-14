@@ -1,6 +1,7 @@
 #ifndef     __JSONRESPONSE_H__
 # define    __JSONRESPONSE_H__
 
+#include	<unistd.h>
 #include    <ctime>
 
 #include    "IResponse.h"

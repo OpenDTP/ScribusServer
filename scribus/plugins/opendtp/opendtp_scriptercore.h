@@ -8,6 +8,28 @@
 # include "logging.h"
 # include "scribuscore.h"
 
+// Includes for default scribus methods for python
+#include "../scriptplugin/cmdcolor.h"
+#include "../scriptplugin/cmddialog.h"
+#include "../scriptplugin/cmddoc.h"
+#include "../scriptplugin/cmdgetprop.h"
+#include "../scriptplugin/cmdgetsetprop.h"
+#include "../scriptplugin/cmdmani.h"
+#include "../scriptplugin/cmdmisc.h"
+#include "../scriptplugin/cmdobj.h"
+#include "../scriptplugin/cmdpage.h"
+#include "../scriptplugin/cmdsetprop.h"
+#include "../scriptplugin/cmdtext.h"
+#include "../scriptplugin/cmdutil.h"
+#include "../scriptplugin/cmdstyle.h"
+#include "../scriptplugin/svgimport.h"
+#include "../scriptplugin/guiapp.h"
+
+// Scribus objects for python
+#include "../scriptplugin/objimageexport.h"
+#include "../scriptplugin/objpdffile.h"
+#include "../scriptplugin/objprinter.h"
+
 # define SCRIPTS_PATH "/data/scripts/"
 
 class OpenDTPScripterCore : public QObject {
