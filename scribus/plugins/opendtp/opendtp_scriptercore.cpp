@@ -233,7 +233,6 @@ PyMethodDef scribus_methods[] = {
 
 std::string OpenDTPScripterCore::getHeader(const std::string &scriptPath, const std::string &scriptName) {
 	std::string header;
-	OpenDTPLogging &logger = OpenDTPLogging::getInstance();
 
 	header = "import sys\n";
 	header += "import cStringIO\n";
@@ -343,6 +342,24 @@ void OpenDTPScripterCore::runScriptFile(std::string script, std::vector<std::str
 			logger.debug("Nothing to display ...\n");
 		}
 	}
+
+	// Closing document if there is one opened
+	// To force closing without any prompt we set modifications to false
+	if (ScCore->primaryMainWindow()->HaveDoc) {
+		ScCore->primaryMainWindow()->doc->setModified(false);
+		logger.debug("Closing document\n");
+		bool ret = ScCore->primaryMainWindow()->slotFileClose();
+		
+		// We couldn't close the document ? We must log it (should never happen ...).
+		if (!ret) {
+			logger.error("Couldn't close document !\n");
+		} else {
+			logger.debug("Document closed\n");
+		}
+
+		qApp->processEvents();
+	}
+
 	Py_XDECREF(result);
 	Py_EndInterpreter(state);
 	PyThreadState_Swap(global_state);
