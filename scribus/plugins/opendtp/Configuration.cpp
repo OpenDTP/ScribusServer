@@ -8,21 +8,21 @@ Configuration::Configuration()
   this->loaded = false;
 }
 
-bool        Configuration::loadFile()
+void        Configuration::loadFile()
 {
   OpenDTPLogging &logger = OpenDTPLogging::getInstance();
 
-  if (this->loaded)
-    return true;
-  try {
-    parser->Load(CONFIG_FILE);
-  } catch (IniParseException &e) {
-    logger.error(e.what());
-    return false;
+  if (!this->loaded)
+  {
+    try {
+      parser->Load(CONFIG_FILE);
+    } catch (IniParseException &e) {
+      logger.error(e.what());
+      exit(EXIT_FAILURE);
+    }
+    logger.debug("Config file successfully loaded!");
+    this->loaded = true;
   }
-  logger.debug("Config file successfully loaded!");
-  this->loaded = true;
-  return true;
 }
 
 int         Configuration::getInt(const std::string &key)
@@ -30,14 +30,12 @@ int         Configuration::getInt(const std::string &key)
   int       value;
   OpenDTPLogging &logger = OpenDTPLogging::getInstance();
 
-
-  if (!this->loadFile())
-    return 0;
+  this->loadFile();
   try {
     this->parser->QueryKeyValue<int>(this->env, key, value);
   } catch (IniParseException &e) {
     logger.error(e.what());
-    return 0;
+    exit(EXIT_FAILURE);
   }
   return (value);
 }
@@ -47,13 +45,12 @@ std::string Configuration::getStr(const std::string &key)
   std::string value;
   OpenDTPLogging &logger = OpenDTPLogging::getInstance();
 
-  if (!this->loadFile())
-    return NULL;
+  this->loadFile();
   try {
   this->parser->QueryKeyValue<std::string>(this->env, key, value);
   } catch (IniParseException &e) {
     logger.error(e.what());
-    return 0;
+    exit(EXIT_FAILURE);
   }
   return (value);
 }

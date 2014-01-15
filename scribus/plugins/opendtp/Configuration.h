@@ -23,7 +23,7 @@ private:
   ~Configuration() {};
   Configuration(Configuration const&) {};
   void operator=(Configuration const &) {};
-  bool loadFile();
+  void loadFile();
 
   std::string   env;
   IniParser     *parser;
