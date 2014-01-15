@@ -4,6 +4,7 @@
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <netinet/in.h>
+# include <arpa/inet.h>
 # include <fcntl.h>
 # include <string>
 
@@ -15,7 +16,6 @@
 # include "opendtp_scriptercore.h"
 # include "socket_thread.h"
 
-# define PORT_NUMBER 8080
 # define LOG_FILE "/tmp/opendtp.log"
 
 class OpenDTPServer : public QThread
