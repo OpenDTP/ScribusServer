@@ -32,6 +32,8 @@ IResponse.h
 ../scriptplugin/objimageexport.h
 ../scriptplugin/objpdffile.h
 ../scriptplugin/objprinter.h
+IniParser.h
+Configuration.h
 )
 
 SET(MY_PLUGIN_SOURCES
@@ -61,6 +63,8 @@ JsonResponse.cpp
 ../scriptplugin/objimageexport.cpp
 ../scriptplugin/objpdffile.cpp
 ../scriptplugin/objprinter.cpp
+IniParser.cpp
+Configuration.cpp
 )
 
 SET(SCRIBUS_MY_PLUGIN "opendtp")

@@ -8,7 +8,6 @@
 # include "logging.h"
 # include "scribuscore.h"
 
-// Includes for default scribus methods for python
 #include "../scriptplugin/cmdcolor.h"
 #include "../scriptplugin/cmddialog.h"
 #include "../scriptplugin/cmddoc.h"
@@ -29,8 +28,6 @@
 #include "../scriptplugin/objimageexport.h"
 #include "../scriptplugin/objpdffile.h"
 #include "../scriptplugin/objprinter.h"
-
-# define SCRIPTS_PATH "/data/scripts/"
 
 class OpenDTPScripterCore : public QObject {
 	Q_OBJECT
