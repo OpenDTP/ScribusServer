@@ -83,7 +83,6 @@ void TabGeneral::restoreDefaults(struct ApplicationPrefs *prefsData)
 	ProPfad->setText(QDir::toNativeSeparators(prefsData->ProfileDir));
 	ScriptPfad->setText(QDir::toNativeSeparators(prefsData->ScriptDir));
 	DocumentTemplateDir->setText(QDir::toNativeSeparators(prefsData->documentTemplatesDir));
-	startUpDialog->setChecked(prefsData->showStartupDialog);
 	showSplashCheckBox->setChecked( !ScQApp->neverSplashExists() );
 	useSmallWidgetsCheck->setChecked(prefsData->useSmallWidgets);
 }

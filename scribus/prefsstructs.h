@@ -270,7 +270,6 @@ struct ApplicationPrefs
 	// lorem ipsum
 	bool useStandardLI;
 	int paragraphsLI;
-	bool showStartupDialog;
 	bool useSmallWidgets; // space savy widgets in palettes - PV
 	bool stickyTools;
 	bool grayscaleIcons;
