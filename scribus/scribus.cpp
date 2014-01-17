@@ -2056,7 +2056,7 @@ void ScribusMainWindow::startUpDialog()
 {
 	bool docSet = false;
 	PrefsContext* docContext = prefsManager->prefsFile->getContext("docdirs", false);
-	NewDoc* dia = new NewDoc(this, RecentDocs, true, ScCore->getGuiLanguage());
+	NewDoc* dia = new NewDoc(this, RecentDocs, ScCore->getGuiLanguage());
 	if (dia->exec())
 	{
 		if (dia->tabSelected() == NewDoc::NewDocumentTab)
@@ -2126,7 +2126,6 @@ void ScribusMainWindow::startUpDialog()
 				loadRecent(fileName);
 		}
 	}
-	prefsManager->setShowStartupDialog(!dia->startUpDialog->isChecked());
 	delete dia;
 	mainWindowStatusLabel->setText( tr("Ready"));
 	if (docSet)
@@ -4020,7 +4019,6 @@ bool ScribusMainWindow::loadDoc(QString fileName)
 			return false;
 		}
 		outlinePalette->setDoc(doc);
-		fileLoader->informReplacementFonts();
 		setCurrentComboItem(view->unitSwitcher, unitGetStrFromIndex(doc->unitIndex()));
 		view->unitChange();
 		setScriptRunning(false);

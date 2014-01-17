@@ -86,13 +86,12 @@ const QSize PageLayoutsWidget::minimumSizeHint()
 	return QSize(maxX, maxY);
 }
 
-NewDoc::NewDoc( QWidget* parent, const QStringList& recentDocs, bool startUp, QString lang ) : QDialog( parent )
+NewDoc::NewDoc( QWidget* parent, const QStringList& recentDocs, QString lang ) : QDialog( parent )
 {
 	setObjectName(QString::fromLocal8Bit("NewDocumentWindow"));
 	setModal(true);
 	prefsManager=PrefsManager::instance();
 	m_tabSelected = 0;
-	m_onStartup = startUp;
 	m_unitIndex = prefsManager->appPrefs.docUnitIndex;
 	m_unitRatio = unitGetRatioFromIndex(m_unitIndex);
 	m_unitSuffix = unitGetSuffixFromIndex(m_unitIndex);
@@ -102,34 +101,12 @@ NewDoc::NewDoc( QWidget* parent, const QStringList& recentDocs, bool startUp, QS
 	TabbedNewDocLayout = new QVBoxLayout( this );
 	TabbedNewDocLayout->setMargin(10);
 	TabbedNewDocLayout->setSpacing(5);
-	if (startUp)
-		tabWidget = new QTabWidget( this );
 	createNewDocPage();
-	if (startUp)
-	{
-		tabWidget->addTab(newDocFrame, tr("&New Document"));
-		createNewFromTempPage();
-		nftGui->setupSettings(lang);
-		tabWidget->addTab(newFromTempFrame, tr("New &from Template"));
-		createOpenDocPage();
-		tabWidget->addTab(openDocFrame, tr("Open &Existing Document"));
-		recentDocList=recentDocs;
- 		createRecentDocPage();
- 		tabWidget->addTab(recentDocFrame, tr("Open Recent &Document"));
- 		TabbedNewDocLayout->addWidget(tabWidget);
-	}
-	else
-		TabbedNewDocLayout->addWidget(newDocFrame);
+	TabbedNewDocLayout->addWidget(newDocFrame);
 
 	Layout1 = new QHBoxLayout;
 	Layout1->setSpacing( 5 );
 	Layout1->setMargin( 0 );
-	if (startUp)
-	{
-		startUpDialog = new QCheckBox( tr( "Do not show this dialog again" ), this );
-		startUpDialog->setChecked(!prefsManager->appPrefs.showStartupDialog);
-		Layout1->addWidget( startUpDialog );
-	}
 	QSpacerItem* spacer = new QSpacerItem( 2, 2, QSizePolicy::Expanding, QSizePolicy::Minimum );
 	Layout1->addItem( spacer );
 	OKButton = new QPushButton( CommonStrings::tr_OK, this );
@@ -162,15 +139,6 @@ NewDoc::NewDoc( QWidget* parent, const QStringList& recentDocs, bool startUp, QS
 	connect(layoutsView, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(itemSelected(QListWidgetItem* )));
 	connect(layoutsView, SIGNAL(itemActivated(QListWidgetItem *)), this, SLOT(itemSelected(QListWidgetItem* )));
 	connect(layoutsView, SIGNAL(itemPressed(QListWidgetItem *)), this, SLOT(itemSelected(QListWidgetItem* )));
-	if (startUp)
-	{
-		connect(nftGui, SIGNAL(leaveOK()), this, SLOT(ExitOK()));
-		connect(recentDocListBox, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(recentDocListBox_doubleClicked()));
-	}
-
-// 	setMinimumSize(minimumSizeHint());
-//  	setMaximumSize(minimumSizeHint());
-// 	resize(minimumSizeHint());
 }
 
 void NewDoc::createNewDocPage()
@@ -555,35 +523,7 @@ void NewDoc::ExitOK()
 	m_bleedTop = marginGroup->topBleed();
 	m_bleedLeft = marginGroup->leftBleed();
 	m_bleedRight = marginGroup->rightBleed();
-	if (m_onStartup)
-	{
-		m_tabSelected = tabWidget->currentIndex();
-		if (m_tabSelected == NewDoc::NewFromTemplateTab) // new doc from template
-		{
-			if (nftGui->currentDocumentTemplate)
-			{
-				m_selectedFile = QDir::fromNativeSeparators(nftGui->currentDocumentTemplate->file);
-				m_selectedFile = QDir::cleanPath(m_selectedFile);
-			}
-		}
-		else if (m_tabSelected == NewDoc::OpenExistingTab) // open existing doc
-		{
-			QStringList files = fileDialog->selectedFiles();
-			if (files.count() != 0)
-				m_selectedFile = QDir::fromNativeSeparators(files[0]);
-		}
-		else if (m_tabSelected == NewDoc::OpenRecentTab) // open recent doc
-		{
-			if (recentDocListBox->currentItem() != NULL)
-			{
-				QString fileName(recentDocListBox->currentItem()->text());
-				if (!fileName.isEmpty())
-					m_selectedFile = QDir::fromNativeSeparators(fileName);
-			}
-		}
-	}
-	else
-		m_tabSelected = NewDoc::NewDocumentTab;
+	m_tabSelected = NewDoc::NewDocumentTab;
 	accept();
 }
 

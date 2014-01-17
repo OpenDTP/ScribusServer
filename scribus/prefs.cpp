@@ -345,7 +345,6 @@ void Preferences::updatePreferences()
 	prefsManager->appPrefs.AppFontSize = tabGeneral->GFsize->value();
 	prefsManager->appPrefs.PaletteFontSize = tabGeneral->GTFsize->value();
 	ScQApp->neverSplash(!tabGeneral->showSplashCheckBox->isChecked());
-	prefsManager->appPrefs.showStartupDialog = tabGeneral->startUpDialog->isChecked();
 	prefsManager->appPrefs.Wheelval = tabGeneral->wheelJumpSpin->value();
 	prefsManager->appPrefs.moveTimeout = tabGeneral->spinTimeout->value();
 	prefsManager->appPrefs.RecentDCount = tabGeneral->recentDocs->value();
@@ -432,7 +431,6 @@ void Preferences::updatePreferences()
 
 	prefsManager->appPrefs.guidesSettings.before = tabGuides->inBackground->isChecked();
 	
-	prefsManager->appPrefs.askBeforeSubstituite = tabMiscellaneous->AskForSubs->isChecked();
 	prefsManager->appPrefs.haveStylePreview = tabMiscellaneous->stylePreview->isChecked();
 	// lorem ipsum
 	prefsManager->appPrefs.useStandardLI = tabMiscellaneous->useStandardLI->isChecked();

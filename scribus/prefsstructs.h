@@ -263,14 +263,12 @@ struct ApplicationPrefs
 	double ScratchRight;
 	double ScratchTop;
 	double ScratchBottom;*/
-	bool askBeforeSubstituite;
 	bool haveStylePreview;
 	bool showToolTips;
 	bool showMouseCoordinates;
 	// lorem ipsum
 	bool useStandardLI;
 	int paragraphsLI;
-	bool showStartupDialog;
 	bool useSmallWidgets; // space savy widgets in palettes - PV
 	bool stickyTools;
 	bool grayscaleIcons;
