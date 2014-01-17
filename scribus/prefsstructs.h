@@ -263,7 +263,6 @@ struct ApplicationPrefs
 	double ScratchRight;
 	double ScratchTop;
 	double ScratchBottom;*/
-	bool askBeforeSubstituite;
 	bool haveStylePreview;
 	bool showToolTips;
 	bool showMouseCoordinates;

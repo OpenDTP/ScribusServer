@@ -45,7 +45,6 @@ public:
 	bool readColors(ColorList & colors);
 	bool readLineStyles(QMap<QString, multiLine> *Sty);
 	bool postLoad(ScribusDoc* currDoc);
- 	void informReplacementFonts();
 	
 	const FileFormat * const formatSLA12x;
 	const FileFormat * const formatSLA13x;

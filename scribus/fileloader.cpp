@@ -376,48 +376,10 @@ bool FileLoader::postLoad(ScribusDoc* currDoc)
 	ReplacedFonts = currDoc->AllFonts->getSubstitutions(ReplacedFonts.keys());
 	if (ReplacedFonts.count() != 0)
 	{
-		if ((prefsManager->appPrefs.askBeforeSubstituite)) 
-		{
-			qApp->changeOverrideCursor(QCursor(Qt::ArrowCursor));
-			FontReplaceDialog dia(0, &ReplacedFonts);
-			if (dia.exec())
-			{
-				QMap<QString,QString>::Iterator itfsu;
-				for (itfsu = ReplacedFonts.begin(); itfsu != ReplacedFonts.end(); ++itfsu)
-				{
-					if (dia.stickyReplacements->isChecked())
-						prefsManager->appPrefs.GFontSub[itfsu.key()] = itfsu.value();
-				}
-				currDoc->AllFonts->setSubstitutions(ReplacedFonts, currDoc);
-				ResourceCollection repl;
-				repl.availableFonts = currDoc->AllFonts;
-				repl.mapFonts(ReplacedFonts);
-				currDoc->replaceNamedResources(repl);
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
+		return false;
 	}
 
 	return true;
-}
-
-void FileLoader::informReplacementFonts()
-{
-	if (ReplacedFonts.count() != 0)
-	{
-		qApp->changeOverrideCursor(QCursor(Qt::ArrowCursor));
-		QString mess = tr("Some fonts used by this document have been substituted:")+"\n\n";
-		QMap<QString,QString>::Iterator it;
-		for (it = ReplacedFonts.begin(); it != ReplacedFonts.end(); ++it)
-		{
-			mess += it.key() + tr(" was replaced by: ")+ it.value() +"\n";
-		}
-		QMessageBox::warning(ScCore->primaryMainWindow(), CommonStrings::trWarning, mess, 1, 0, 0);
-	}
 }
 
 bool FileLoader::findFormat(uint formatId, QList<FileFormat>::const_iterator &it)

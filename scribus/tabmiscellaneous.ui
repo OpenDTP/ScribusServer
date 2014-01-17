@@ -112,21 +112,10 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0" >
-    <widget class="QCheckBox" name="AskForSubs" >
-     <property name="toolTip" >
-      <string>Allow Scribus to automatically replace fonts when they are missing when opening a document</string>
-     </property>
-     <property name="text" >
-      <string>Always ask before fonts are replaced when loading a document</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <tabstops>
-  <tabstop>AskForSubs</tabstop>
   <tabstop>stylePreview</tabstop>
   <tabstop>useStandardLI</tabstop>
   <tabstop>paragraphsLI</tabstop>

@@ -4019,7 +4019,6 @@ bool ScribusMainWindow::loadDoc(QString fileName)
 			return false;
 		}
 		outlinePalette->setDoc(doc);
-		fileLoader->informReplacementFonts();
 		setCurrentComboItem(view->unitSwitcher, unitGetStrFromIndex(doc->unitIndex()));
 		view->unitChange();
 		setScriptRunning(false);
