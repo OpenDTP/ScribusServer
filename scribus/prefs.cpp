@@ -431,7 +431,6 @@ void Preferences::updatePreferences()
 
 	prefsManager->appPrefs.guidesSettings.before = tabGuides->inBackground->isChecked();
 	
-	prefsManager->appPrefs.askBeforeSubstituite = tabMiscellaneous->AskForSubs->isChecked();
 	prefsManager->appPrefs.haveStylePreview = tabMiscellaneous->stylePreview->isChecked();
 	// lorem ipsum
 	prefsManager->appPrefs.useStandardLI = tabMiscellaneous->useStandardLI->isChecked();

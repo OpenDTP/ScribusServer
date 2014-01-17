@@ -415,7 +415,6 @@ void PrefsManager::initDefaults()
 	pageS.pageNames.append(CommonStrings::pageLocRight);
 	appPrefs.pageSets.append(pageS);
 	appPrefs.FacingPages = singlePage;
-	appPrefs.askBeforeSubstituite = true;
 	appPrefs.haveStylePreview = true;
 	// lorem ipsum defaults
 	appPrefs.useStandardLI = false;
@@ -1335,7 +1334,6 @@ bool PrefsManager::WritePref(QString filename)
 	QDomElement dc2=docu.createElement("FONTS");
 	dc2.setAttribute("FACE",appPrefs.toolSettings.defFont);
 	dc2.setAttribute("SIZE",appPrefs.toolSettings.defSize / 10.0);
-	dc2.setAttribute("AutomaticSubst", static_cast<int>(appPrefs.askBeforeSubstituite));
 	elem.appendChild(dc2);
 	QDomElement dc3=docu.createElement("TYPO");
 	dc3.setAttribute("TIEF",appPrefs.typographicSettings.valueSubScript);
@@ -2211,7 +2209,6 @@ bool PrefsManager::ReadPref(QString ho)
 				if (!newFont.isEmpty())
 					appPrefs.toolSettings.defFont = newFont;
 				appPrefs.toolSettings.defSize = qRound( ScCLocale::toDoubleC(dc.attribute("SIZE"), 12.0) * 10.0 );
-				appPrefs.askBeforeSubstituite = static_cast<bool>(dc.attribute("AutomaticSubst", "1").toInt());
 			}
 		}
 		if (dc.tagName()=="FONT")

@@ -26,7 +26,6 @@ TabMiscellaneous::TabMiscellaneous(QWidget* parent)
 
 void TabMiscellaneous::restoreDefaults(struct ApplicationPrefs *prefsData)
 {
-	AskForSubs->setChecked(prefsData->askBeforeSubstituite);
 	stylePreview->setChecked(prefsData->haveStylePreview);
 	useStandardLI->setChecked(prefsData->useStandardLI);
 	paragraphsLI->setValue(prefsData->paragraphsLI);
