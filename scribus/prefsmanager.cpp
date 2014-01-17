@@ -420,7 +420,6 @@ void PrefsManager::initDefaults()
 	// lorem ipsum defaults
 	appPrefs.useStandardLI = false;
 	appPrefs.paragraphsLI = 10;
-	appPrefs.showStartupDialog = true;
 	appPrefs.useSmallWidgets = false;
 	initDefaultCheckerPrefs(&appPrefs.checkerProfiles);
 	appPrefs.curCheckProfile = CommonStrings::PostScript;
@@ -1056,11 +1055,6 @@ bool PrefsManager::GetAllFonts(bool showFontInfo)
 	return !appPrefs.AvailFonts.isEmpty();
 }
 
-void PrefsManager::setShowStartupDialog(const bool showDialog)
-{
-	appPrefs.showStartupDialog=showDialog;
-}
-
 const ColorList& PrefsManager::colorSet()
 {
 	return appPrefs.DColors;
@@ -1284,7 +1278,6 @@ bool PrefsManager::WritePref(QString filename)
 	dc.setAttribute("STECOLOR", appPrefs.STEcolor.name());
 	dc.setAttribute("STEFONT", appPrefs.STEfont);
 	dc.setAttribute("STYLEPREVIEW", static_cast<int>(appPrefs.haveStylePreview));
-	dc.setAttribute("StartUp", static_cast<int>(appPrefs.showStartupDialog));
 	dc.setAttribute("UseSmallWidgets", static_cast<int>(appPrefs.useSmallWidgets));
 	dc.setAttribute("ToolTips", static_cast<int>(appPrefs.showToolTips));
 	dc.setAttribute("showMouseCoordinates", static_cast<int>(appPrefs.showMouseCoordinates));
@@ -1809,7 +1802,6 @@ bool PrefsManager::ReadPref(QString ho)
 			appPrefs.guidesSettings.showBleed = static_cast<bool>(dc.attribute("showBleed", "1").toInt());
 			appPrefs.guidesSettings.rulerMode = static_cast<bool>(dc.attribute("rulerMode", "1").toInt());
 			appPrefs.haveStylePreview = static_cast<bool>(dc.attribute("STYLEPREVIEW", "1").toInt());
-			appPrefs.showStartupDialog = static_cast<bool>(dc.attribute("StartUp", "1").toInt());
 			appPrefs.useSmallWidgets = static_cast<bool>(dc.attribute("UseSmallWidgets", "0").toInt());
 			appPrefs.scratch.Bottom = ScCLocale::toDoubleC(dc.attribute("ScratchBottom"), 20.0);
 			appPrefs.scratch.Left   = ScCLocale::toDoubleC(dc.attribute("ScratchLeft"), 100.0);

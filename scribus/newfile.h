@@ -65,7 +65,7 @@ public:
 		OpenRecentTab
 	} ActionSelected;
 
-	NewDoc( QWidget* parent, const QStringList& recentDocs, bool startUp = false, QString lang = "");
+	NewDoc( QWidget* parent, const QStringList& recentDocs, QString lang = "");
 	~NewDoc() {};
 	void createNewDocPage();
 	void createNewFromTempPage();
@@ -93,7 +93,6 @@ public:
 	QComboBox* pageSizeComboBox;
 	QComboBox* pageOrientationComboBox;
 	QComboBox* unitOfMeasureComboBox;
-	QCheckBox* startUpDialog;
 	QCheckBox* autoTextFrame;
 	QCheckBox* startDocSetup;
 	ScrSpinBox* Distance;
@@ -114,7 +113,6 @@ public:
 	QPushButton* OKButton;
 	QPushButton* CancelB;
 
-	bool onStartup(void) const { return m_onStartup;}
 	int  tabSelected(void) const { return m_tabSelected;}
 	QString selectedFile(void) const { return m_selectedFile; }
 
@@ -174,7 +172,6 @@ protected:
 	QString m_selectedFile;
 	int m_unitIndex;
 	int m_tabSelected;
-	bool m_onStartup;
 	double m_bleedBottom;
 	double m_bleedTop;
 	double m_bleedLeft;

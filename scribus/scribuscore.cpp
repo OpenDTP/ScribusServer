@@ -132,10 +132,7 @@ int ScribusCore::startGUI(bool showSplash, bool showFontInfo, bool showProfileIn
 		}
 		else
 		{
-			if (PrefsManager::instance()->appPrefs.showStartupDialog)
-				scribus->startUpDialog();
-			else
-				scribus->setFocus();
+			scribus->setFocus();
 		}
 	}	
 	else if (subsRet==QMessageBox::Help)
