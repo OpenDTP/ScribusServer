@@ -287,7 +287,7 @@ void OpenDTPScripterCore::runScriptFile(std::string script, std::vector<std::str
 	std::string header;
 	PyObject *m, *s;
 	OpenDTPLogging &logger = OpenDTPLogging::getInstance();
-  Configuration &conf = Configuration::getInstance();
+	Configuration &conf = Configuration::getInstance();
 
 	logger.info("Starting scripter initialisation");
 
@@ -320,6 +320,8 @@ void OpenDTPScripterCore::runScriptFile(std::string script, std::vector<std::str
 	PyObject* globals = PyModule_GetDict(m);
 	PyObject* scribus_globals = PyModule_GetDict(s);
 	PyDict_SetItemString(scribus_globals, const_cast<char*>("scribus_version"), PyString_FromString(const_cast<char*>("1.4.3")));
+	PyDict_SetItemString(scribus_globals, const_cast<char*>("document_pool"), PyString_FromString(conf.getStr("pool_path").c_str()));
+	PyDict_SetItemString(scribus_globals, const_cast<char*>("script_pool"), PyString_FromString(conf.getStr("scripts_path").c_str()));
 
 	header = this->getHeader(conf.getStr("scripts_path"), script);
 	logger.debug("Header set :");
