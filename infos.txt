@@ -1,4 +1,0 @@
-socket UNIX créé par le plugin.
-envoi sur la socket d'un script python, port 8080
-
-faire documentation install du plugin, et fonctionnement général du plugin.
